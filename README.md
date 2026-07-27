@@ -1,75 +1,57 @@
 # Nexora Rename
 
-Una herramienta de escritorio en Python diseñada para automatizar y gestionar el renombrado masivo de archivos multimedia de forma eficiente, equipada con una interfaz gráfica de usuario (UI) bajo el sistema de diseño oficial de **Nexora**.
+Una herramienta de escritorio rápida y eficiente diseñada para organizar, gestionar y renombrar de forma masiva tus archivos de fotos y vídeos bajo el sistema de diseño oficial de **Nexora**.
 
 ---
 
-## 🚀 Características
+## 📥 Descarga e Instalación
 
-- **Análisis y Escaneo Asíncrono:** Procesa imágenes (`.jpg`, `.png`, `.webp`, `.heic`, etc.) y vídeos (`.mp4`, `.mov`, `.mkv`, etc.) sin congelar la interfaz gracias a un sistema de hilos (`QThread`).
+1. Ve a la sección de **[Releases](../../releases)** en este repositorio.
 
-- **Inyección y Actualización de Metadatos:** Integra **ExifTool** para escribir etiquetas de título, autoría ("Saarmyx"), software e identificadores únicos de manera transparente.
+2. Descarga la última versión del archivo ejecutable: `NexoraRename.exe`.
 
-- **Detección Inteligente de Duplicados:** Algoritmo de verificación por bloques Hash SHA256 (1MB) que evita sobrescribir archivos o procesar duplicados exactos.
+3. Guarda el archivo en la carpeta que prefieras de tu equipo.
 
-- **Sistema de Deshacer (Undo):** Registro persistente en `history.json` para revertir operaciones de renombrado de forma segura.
-
-- **Interfaz Nexora Design System:** Estética industrial monocromática (`#0A0A0A`) con acentos en rojo marca (`#E11D2E`), tabla interactiva de previsualización y soporte para _Drag & Drop_.
+4. Haz doble clic sobre `NexoraRename.exe` para abrir la aplicación. **No requiere instalación.**
 
 ---
 
-## 📦 Requisitos e Instalación
+## 🚀 Características Principales
 
-1. **Python 3.x** instalado.
-2. Clona este repositorio:
+- **Renombrado Inteligente e Inmediato:** Organiza fotografías y vídeos asignando nombres basados en la fecha real de toma/grabación (datos EXIF y metadatos multimedia).
 
-   ```bash
-   git clone [https://github.com/tu-usuario/NEXORARENAME.git](https://github.com/tu-usuario/NEXORARENAME.git)
-   cd NEXORARENAME
-   ```
+- **Procesamiento de Alta Velocidad:** Escaneo y previsualización de archivos sin pausas ni congelamientos de pantalla.
 
-3. Instala las dependencias necesarias:
+- **Inyección de Metadatos:** Aplica etiquetas internas (título, autoría, identificadores únicos) directamente en los archivos compatibles.
 
-```bash
-pip install -r requirements.txt
+- **Detección de Duplicados:** Protege tus datos detectando automáticamente archivos idénticos mediante hash SHA256 para evitar sobrescribir información.
 
-```
+- **Sistema de Deshacer (Undo):** Permite revertir de forma segura el último proceso de renombrado si necesitas restaurar los nombres originales.
 
-4. **ExifTool:** Asegúrate de tener el ejecutable `exiftool.exe` ubicado en la raíz del proyecto.
+- **Soporte Drag & Drop:** Arrastra y suelta carpetas directamente en la aplicación.
 
 ---
 
-## 🛠️ Uso
+## 🛠️ Modo de Uso
 
-Para iniciar la aplicación, ejecuta el archivo principal desde la consola:
+1. **Añadir Carpetas:** Usa el botón _Agregar carpeta_ o arrastra las carpetas directamente a la interfaz.
 
-```bash
-python main.py
+2. **Analizar:** Haz clic en _Analizar_ para obtener una previsualización clara de la estructura actual y los nuevos nombres propuestos.
 
-```
+3. **Renombrar:** Confirma la acción con el botón _Renombrar_.
+
+4. **Deshacer (Opcional):** Si deseas revertir los cambios de la última sesión, presiona el botón _Deshacer_.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📋 Formatos Compatibles
 
-```text
-NEXORARENAME/
-├── core/
-│   ├── execute_rename.py    # Lógica de renombrado, hashing y conflictos
-│   ├── history.json_writer  # Gestión de historial y restauración (undo)
-│   ├── metadata_writer.py  # Integración con ExifTool y ocultación de consola CMD
-│   ├── metadata.py         # Extracción de fechas EXIF / MediaInfo
-│   ├── rename_worker.py    # QThread para ejecución de renombrado
-│   ├── renamer.py          # Generador de nombres basados en marcas de tiempo
-│   ├── scanner.py          # Recopilador e inspector de carpetas
-│   └── worker.py           # QThread para escaneo asíncrono
-├── ui/
-│   ├── main_window.py      # Ventana principal y gestión de eventos
-│   ├── preview_table.py    # Tabla personalizada con menú contextual
-│   └── styles.py           # Estilos QSS (Nexora Design Tokens)
-├── exiftool.exe            # Binario para inyección de metadatos
-├── main.py                 # Punto de entrada de la aplicación
-├── requirements.txt        # Lista de dependencias del proyecto
-└── .gitignore              # Exclusiones de Git
+- **Imágenes:** `.jpg`, `.jpeg`, `.png`, `.webp`, `.heic`, `.bmp`, `.tiff`
 
-```
+- **Vídeos:** `.mp4`, `.mov`, `.mkv`, `.avi`, `.webm`, `.3gp`, `.m4v`
+
+---
+
+## 💬 Soporte y Reportes
+
+Si encuentras algún problema o tienes alguna sugerencia de mejora, puedes abrir una solicitud en la pestaña de **[Issues](../../issues)** de este repositorio.
