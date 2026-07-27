@@ -1,14 +1,18 @@
-# Python (Archivos compilados y caché)
+# Python (Compilados y caché)
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# Archivos de registro e historial (Datos locales)
+# Configuración de editor y espacio de trabajo
+.vscode/
+*.code-workspace
+
+# Compilación y ejecutables (PyInstaller)
+build/
+dist/
+*.spec
+
+# Archivos locales de ejecución e historial
 logs/
 history.json
-
-# Entornos virtuales (Por si creas uno más adelante)
-venv/
-.venv/
-env/

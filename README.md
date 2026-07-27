@@ -1,4 +1,4 @@
-# NEXORARENAME
+# Nexora Rename
 
 Una herramienta en Python diseñada para automatizar y gestionar el renombrado de archivos de forma masiva y eficiente, equipada con una interfaz gráfica de usuario (UI).
 
