@@ -4,12 +4,15 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
+    QToolButton,
+    QMenu,
     QListWidget,
     QLabel,
     QFileDialog,
     QMessageBox,
     QProgressBar
 )
+from PySide6.QtCore import Qt
 
 from core.worker import ScanWorker
 from core.rename_worker import RenameWorker
@@ -35,12 +38,8 @@ class MainWindow(QMainWindow):
 
         self.setup_ui()
 
-    # ==================================================
-    # UI
-    # ==================================================
-
     def setup_ui(self):
-        self.setWindowTitle("NexoraRen v1.0")
+        self.setWindowTitle("NexoraRename v1.0 — Ubuntu Edition")
         self.resize(1300, 800)
         self.setAcceptDrops(True)
         self.setStyleSheet(DARK_STYLE)
@@ -50,17 +49,28 @@ class MainWindow(QMainWindow):
 
         layout = QVBoxLayout(central)
 
-        # BOTONES SUPERIORES
+        # ==========================================
+        # BARRA SUPERIOR CON MENÚS FLOTANTES
+        # ==========================================
         top_layout = QHBoxLayout()
 
-        self.add_folder_btn = QPushButton("Agregar carpeta")
-        self.remove_folder_btn = QPushButton("Eliminar carpeta")
+        # Menú flotante para Gestión de Carpetas
+        self.folder_menu_btn = QToolButton()
+        self.folder_menu_btn.setText("Carpetas")
+        self.folder_menu_btn.setPopupMode(QToolButton.InstantPopup)
+        
+        folder_menu = QMenu(self)
+        folder_menu.setStyleSheet(DARK_STYLE)
+        self.action_add = folder_menu.addAction("Agregar carpeta")
+        self.action_remove = folder_menu.addAction("Eliminar carpeta seleccionada")
+        self.folder_menu_btn.setMenu(folder_menu)
+
+        # Botones de Acción Principal
         self.scan_btn = QPushButton("Analizar")
         self.rename_btn = QPushButton("Renombrar")
-        self.undo_btn = QPushButton("Deshacer")
+        self.undo_btn = QPushButton("Deshacer cambios")
 
-        top_layout.addWidget(self.add_folder_btn)
-        top_layout.addWidget(self.remove_folder_btn)
+        top_layout.addWidget(self.folder_menu_btn)
         top_layout.addStretch()
         top_layout.addWidget(self.scan_btn)
         top_layout.addWidget(self.rename_btn)
@@ -82,12 +92,12 @@ class MainWindow(QMainWindow):
         self.progress_bar.setValue(0)
         layout.addWidget(self.progress_bar)
 
-        self.stats_label = QLabel("Listo")
+        self.stats_label = QLabel("Listo para operar")
         layout.addWidget(self.stats_label)
 
-        # CONEXIONES
-        self.add_folder_btn.clicked.connect(self.add_folder)
-        self.remove_folder_btn.clicked.connect(self.remove_folder)
+        # CONEXIONES DE MENÚS Y BOTONES
+        self.action_add.triggered.connect(self.add_folder)
+        self.action_remove.triggered.connect(self.remove_folder)
         self.scan_btn.clicked.connect(self.start_scan)
         self.rename_btn.clicked.connect(self.start_rename)
         self.undo_btn.clicked.connect(self.undo_changes)
@@ -95,7 +105,7 @@ class MainWindow(QMainWindow):
         self.rename_btn.setEnabled(False)
 
     # ==================================================
-    # CARPETAS
+    # LÓGICA DE CARPETAS Y ACCIONES (Igual que antes)
     # ==================================================
 
     def add_folder(self):
@@ -104,11 +114,7 @@ class MainWindow(QMainWindow):
             return
 
         if folder in self.folders:
-            QMessageBox.information(
-                self,
-                "Información",
-                "La carpeta ya fue agregada."
-            )
+            QMessageBox.information(self, "Información", "La carpeta ya fue agregada.")
             return
 
         self.folders.append(folder)
@@ -122,33 +128,21 @@ class MainWindow(QMainWindow):
         self.folders.pop(row)
         self.folder_list.takeItem(row)
 
-    # ==================================================
-    # ESCANEO
-    # ==================================================
-
     def start_scan(self):
         if not self.folders:
-            QMessageBox.warning(
-                self,
-                "Advertencia",
-                "Seleccione al menos una carpeta."
-            )
+            QMessageBox.warning(self, "Advertencia", "Seleccione al menos una carpeta.")
             return
 
         self.table.setRowCount(0)
         self.progress_bar.setValue(0)
         self.scan_btn.setEnabled(False)
-        self.stats_label.setText("Analizando...")
+        self.stats_label.setText("Analizando archivos...")
 
         self.scan_worker = ScanWorker(self.folders)
         self.scan_worker.progress.connect(self.update_progress)
         self.scan_worker.finished_scan.connect(self.load_preview)
         self.scan_worker.error.connect(self.show_error)
         self.scan_worker.start()
-
-    # ==================================================
-    # PREVIEW
-    # ==================================================
 
     def load_preview(self, files):
         self.files = files
@@ -158,20 +152,11 @@ class MainWindow(QMainWindow):
         self.rename_btn.setEnabled(len(files) > 0)
         self.stats_label.setText(f"Archivos encontrados: {len(files)}")
 
-    # ==================================================
-    # RENOMBRADO
-    # ==================================================
-
     def start_rename(self):
         if not self.files:
             return
 
-        confirm = QMessageBox.question(
-            self,
-            "Confirmar",
-            f"¿Renombrar {len(self.files)} archivos?"
-        )
-
+        confirm = QMessageBox.question(self, "Confirmar", f"¿Renombrar {len(self.files)} archivos?")
         if confirm != QMessageBox.Yes:
             return
 
@@ -192,47 +177,20 @@ class MainWindow(QMainWindow):
             f"Metadatos: {stats['metadata_updated']} | "
             f"Errores: {stats['errors']}"
         )
-
         self.rename_btn.setEnabled(False)
-        QMessageBox.information(
-            self,
-            "Finalizado",
-            "Proceso completado correctamente."
-        )
-
-    # ==================================================
-    # DESHACER
-    # ==================================================
+        QMessageBox.information(self, "Finalizado", "Proceso completado correctamente.")
 
     def undo_changes(self):
         if not has_history():
-            QMessageBox.information(
-                self,
-                "Información",
-                "No existe historial."
-            )
+            QMessageBox.information(self, "Información", "No existe historial.")
             return
 
-        confirm = QMessageBox.question(
-            self,
-            "Deshacer",
-            "¿Desea restaurar todos los cambios?"
-        )
-
+        confirm = QMessageBox.question(self, "Deshacer", "¿Desea restaurar todos los cambios?")
         if confirm != QMessageBox.Yes:
             return
 
         stats = undo_last_operation()
-
-        QMessageBox.information(
-            self,
-            "Restauración finalizada",
-            f"Restaurados: {stats['restored']}\nErrores: {stats['errors']}"
-        )
-
-    # ==================================================
-    # UTILIDADES
-    # ==================================================
+        QMessageBox.information(self, "Restauración", f"Restaurados: {stats['restored']}\nErrores: {stats['errors']})
 
     def update_progress(self, value):
         self.progress_bar.setValue(value)
@@ -241,10 +199,6 @@ class MainWindow(QMainWindow):
         QMessageBox.critical(self, "Error", error)
         self.scan_btn.setEnabled(True)
         self.rename_btn.setEnabled(True)
-
-    # ==================================================
-    # DRAG & DROP
-    # ==================================================
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():

@@ -15,9 +15,9 @@ QWidget {
 }
 
 /* ==================================================
-   BUTTONS (Sharp radius, technical feel)
+   BUTTONS & TOOLBUTTONS
    ================================================== */
-QPushButton {
+QPushButton, QToolButton {
     background-color: #0A0A0A;
     color: #FFFFFF;
     border: 1px solid #545454;
@@ -28,22 +28,43 @@ QPushButton {
     letter-spacing: 0.06em;
 }
 
-QPushButton:hover {
+QPushButton:hover, QToolButton:hover {
     background-color: #2B2B2B;
     border-color: #E11D2E;
     color: #FFFFFF;
 }
 
-QPushButton:pressed {
+QPushButton:pressed, QToolButton:pressed {
     background-color: #E11D2E;
     border-color: #E11D2E;
     color: #FFFFFF;
 }
 
-QPushButton:disabled {
+QPushButton:disabled, QToolButton:disabled {
     background-color: #0A0A0A;
     color: #545454;
     border-color: #2B2B2B;
+}
+
+/* ==================================================
+   MENÚS FLOTANTES (QMenu)
+   ================================================== */
+QMenu {
+    background-color: #0A0A0A;
+    border: 1px solid #2B2B2B;
+    padding: 4px;
+}
+
+QMenu::item {
+    background-color: transparent;
+    color: #ECECEC;
+    padding: 8px 24px;
+    font-weight: 500;
+}
+
+QMenu::item:selected {
+    background-color: #B01522;
+    color: #FFFFFF;
 }
 
 /* ==================================================
