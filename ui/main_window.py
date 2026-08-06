@@ -190,7 +190,7 @@ class MainWindow(QMainWindow):
             return
 
         stats = undo_last_operation()
-        QMessageBox.information(self, "Restauración", f"Restaurados: {stats['restored']}\nErrores: {stats['errors']})
+        QMessageBox.information(self, "Restauración", f"Restaurados: {stats['restored']}\nErrores: {stats['errors']}")
 
     def update_progress(self, value):
         self.progress_bar.setValue(value)

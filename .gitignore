@@ -1,18 +1,38 @@
-# Python (Compilados y caché)
+# ==========================================
+# PYTHON
+# ==========================================
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.venv/
+venv/
+env/
 
-# Configuración de editor y espacio de trabajo
+# ==========================================
+# EDITORES Y ENTORNO DE TRABAJO
+# ==========================================
 .vscode/
 *.code-workspace
+.idea/
+.DS_Store
 
-# Compilación y ejecutables (PyInstaller)
+# ==========================================
+# PYINSTALLER Y COMPILACIÓN
+# ==========================================
 build/
 dist/
 *.spec
 
-# Archivos locales de ejecución e historial
+# ==========================================
+# INSTALADOR Y PAQUETES DEBIAN (.deb)
+# ==========================================
+deb_build/
+*.deb
+
+# ==========================================
+# HISTORIAL, LOGS Y DATOS LOCALES
+# ==========================================
 logs/
 history.json
+*.log
