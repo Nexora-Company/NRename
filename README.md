@@ -1,57 +1,84 @@
 # Nexora Rename
 
-Una herramienta de escritorio rápida y eficiente diseñada para organizar, gestionar y renombrar de forma masiva tus archivos de fotos y vídeos bajo el sistema de diseño oficial de **Nexora**.
+Herramienta de escritorio de Nexora para organizar y renombrar de forma masiva fotos y vídeos por fecha real de captura.
 
----
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![PySide6](https://img.shields.io/badge/Qt-PySide6-16161A)
+![Platforms](https://img.shields.io/badge/Platforms-Windows%20%7C%20Linux-lightgrey)
 
-## 📥 Descarga e Instalación
+## Propósito e integración
 
-1. Ve a la sección de **[Releases](../../releases)** en este repositorio.
+Responsabilidad única (SRP): escanear carpetas, proponer nombres `IMG_/VID_` basados en EXIF/metadatos multimedia y ejecutar el renombrado con detección de duplicados (SHA256), inyección de metadatos y deshacer seguro.
 
-2. Descarga la última versión del archivo ejecutable: `NexoraRename.exe`.
+Se integra en el ecosistema Nexora como utilidad de escritorio autónoma. Identidad visual: tokens oficiales de Nexora (modo oscuro `#0D0D0F` / `#131317`, rojo de marca `#A50021`).
 
-3. Guarda el archivo en la carpeta que prefieras de tu equipo.
+## Estructura del proyecto
 
-4. Haz doble clic sobre `NexoraRename.exe` para abrir la aplicación. **No requiere instalación.**
+```text
+NexoraRename/
+├── main.py
+├── core/
+│   ├── scanner.py
+│   ├── renamer.py
+│   ├── metadata.py
+│   ├── metadata_writer.py
+│   ├── execute_rename.py
+│   ├── history.py
+│   ├── worker.py
+│   └── rename_worker.py
+├── ui/
+│   ├── main_window.py
+│   ├── preview_table.py
+│   ├── styles.py
+│   └── tokens.py
+└── resources/
+    └── IconRename.png
+```
 
----
+## Funcionalidades principales
 
-## 🚀 Características Principales
+- Renombrado por fecha real: EXIF en imágenes, metadatos multimedia en vídeo, fecha de modificación como respaldo.
+- Previsualización antes de renombrar con tabla de carpeta, nombre actual y nuevo nombre.
+- Detección de duplicados por SHA256 y resolución de conflictos con sufijo secuencial `_001`.
+- Inyección de metadatos (título, autoría `Nexora`) vía ExifTool.
+- Historial local con deshacer (`~/.nexora-rename/history.json`).
+- Drag & drop de carpetas y menú contextual (abrir archivo/carpeta, copiar ruta).
+- Formatos: imágenes `.jpg` `.jpeg` `.png` `.webp` `.heic` `.bmp` `.tiff`; vídeos `.mp4` `.mov` `.mkv` `.avi` `.webm` `.3gp` `.m4v`.
 
-- **Renombrado Inteligente e Inmediato:** Organiza fotografías y vídeos asignando nombres basados en la fecha real de toma/grabación (datos EXIF y metadatos multimedia).
+## Inicio rápido
 
-- **Procesamiento de Alta Velocidad:** Escaneo y previsualización de archivos sin pausas ni congelamientos de pantalla.
+Requisito externo: ExifTool disponible en `PATH` (Windows: `exiftool.exe` junto al proyecto o en `PATH`; Linux: `sudo apt install libimage-exiftool-perl`).
 
-- **Inyección de Metadatos:** Aplica etiquetas internas (título, autoría, identificadores únicos) directamente en los archivos compatibles.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
 
-- **Detección de Duplicados:** Protege tus datos detectando automáticamente archivos idénticos mediante hash SHA256 para evitar sobrescribir información.
+Flujo de uso: agregar carpeta o arrastrarla a la ventana, pulsar Analizar, revisar la previsualización, pulsar Renombrar, usar Deshacer cambios solo si se necesita revertir la última operación.
 
-- **Sistema de Deshacer (Undo):** Permite revertir de forma segura el último proceso de renombrado si necesitas restaurar los nombres originales.
+## Desarrollo local y pruebas
 
-- **Soporte Drag & Drop:** Arrastra y suelta carpetas directamente en la aplicación.
+```bash
+pip install -r requirements.txt
+python -m compileall core ui main.py
+python main.py
+pyinstaller --noconfirm --windowed --name NexoraRename main.py
+bash build_deb.sh
+```
 
----
+Sin suite de pruebas automatizadas actualmente. Verificación mínima exigida antes de cada cambio: compilación con `compileall` y arranque manual con Analizar y Renombrar sobre una carpeta de prueba.
 
-## 🛠️ Modo de Uso
+## Estándar de contribución
 
-1. **Añadir Carpetas:** Usa el botón _Agregar carpeta_ o arrastra las carpetas directamente a la interfaz.
+Commits atómicos con rutas explícitas y Conventional Commits (`feat`, `fix`, `style`, `refactor`, `chore`, `test`). Prohibido `git add .`.
 
-2. **Analizar:** Haz clic en _Analizar_ para obtener una previsualización clara de la estructura actual y los nuevos nombres propuestos.
+```bash
+git add core/scanner.py ui/main_window.py
+git commit -m "feat(core): ejemplo de cambio atómico"
+```
 
-3. **Renombrar:** Confirma la acción con el botón _Renombrar_.
+## Soporte
 
-4. **Deshacer (Opcional):** Si deseas revertir los cambios de la última sesión, presiona el botón _Deshacer_.
-
----
-
-## 📋 Formatos Compatibles
-
-- **Imágenes:** `.jpg`, `.jpeg`, `.png`, `.webp`, `.heic`, `.bmp`, `.tiff`
-
-- **Vídeos:** `.mp4`, `.mov`, `.mkv`, `.avi`, `.webm`, `.3gp`, `.m4v`
-
----
-
-## 💬 Soporte y Reportes
-
-Si encuentras algún problema o tienes alguna sugerencia de mejora, puedes abrir una solicitud en la pestaña de **[Issues](../../issues)** de este repositorio.
+Reportar problemas y propuestas en la pestaña Issues del repositorio.
