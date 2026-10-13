@@ -1,7 +1,10 @@
 #!/bin/bash
+set -euo pipefail
 
-# Nombre del paquete
-PKG_DIR="deb_build/nexora-rename_1.0_amd64"
+# Nexora Rename — empaquetado .deb (Linux amd64)
+APP_NAME="nexora-rename"
+VERSION="1.1.0"
+PKG_DIR="deb_build/${APP_NAME}_${VERSION}_amd64"
 
 # 1. Crear estructura de carpetas
 mkdir -p "$PKG_DIR/DEBIAN"
@@ -12,6 +15,7 @@ mkdir -p "$PKG_DIR/usr/share/icons/hicolor/256x256/apps"
 
 # 2. Copiar archivos de PyInstaller
 cp -r dist/NexoraRename/* "$PKG_DIR/usr/share/nexora-rename/"
+cp resources/IconRename.png "$PKG_DIR/usr/share/icons/hicolor/256x256/apps/nexora-rename.png"
 
 # 3. Crear el script en /usr/bin
 cat << 'EOF' > "$PKG_DIR/usr/bin/nexora-rename"
@@ -21,15 +25,15 @@ EOF
 chmod +x "$PKG_DIR/usr/bin/nexora-rename"
 
 # 4. Crear DEBIAN/control
-cat << 'EOF' > "$PKG_DIR/DEBIAN/control"
+cat << EOF > "$PKG_DIR/DEBIAN/control"
 Package: nexora-rename
-Version: 1.0-1
+Version: ${VERSION}-1
 Section: utils
 Priority: optional
 Architecture: amd64
 Maintainer: Saarmyx <saarmyx@nexoralabs.com>
 Depends: libgl1, libglx-mesa0, libxcb-cursor0, libmediainfo0v5, libimage-exiftool-perl
-Description: Utilidad de renombrado masivo y metadatos con diseño industrial.
+Description: Utilidad de renombrado masivo y metadatos con diseño Nexora.
 EOF
 
 # 5. Crear archivo .desktop
@@ -45,5 +49,5 @@ Categories=Utility;FileTools;
 EOF
 
 # 6. Construir el .deb
-dpkg-deb --build deb_build/nexora-rename_1.0_amd64
-echo "¡Paquete .deb generado con éxito en la carpeta deb_build/!"
+dpkg-deb --build "$PKG_DIR"
+echo "Paquete .deb generado en $PKG_DIR.deb"
