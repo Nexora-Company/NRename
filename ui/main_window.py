@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QProgressBar
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 
 from core.worker import ScanWorker
 from core.rename_worker import RenameWorker
@@ -39,10 +40,11 @@ class MainWindow(QMainWindow):
         self.setup_ui()
 
     def setup_ui(self):
-        self.setWindowTitle("NexoraRename v1.0 — Ubuntu Edition")
+        self.setWindowTitle("Nexora Rename — v1.1.0")
         self.resize(1300, 800)
         self.setAcceptDrops(True)
         self.setStyleSheet(DARK_STYLE)
+        self.setWindowIcon(QIcon("resources/IconRename.png"))
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -67,8 +69,11 @@ class MainWindow(QMainWindow):
 
         # Botones de Acción Principal
         self.scan_btn = QPushButton("Analizar")
+        self.scan_btn.setAccessibleName("Analizar carpetas")
         self.rename_btn = QPushButton("Renombrar")
+        self.rename_btn.setAccessibleName("Renombrar archivos")
         self.undo_btn = QPushButton("Deshacer cambios")
+        self.undo_btn.setAccessibleName("Deshacer cambios")
 
         top_layout.addWidget(self.folder_menu_btn)
         top_layout.addStretch()

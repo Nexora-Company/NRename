@@ -5,6 +5,10 @@ from core.history import add_history_entry
 from core.metadata_writer import update_metadata
 
 
+# Autoría registrada en metadatos. Marca oficial: Nexora.
+METADATA_AUTHOR = "Nexora"
+
+
 def sha256_file(path: Path):
     """
     Calcula el hash SHA256 del archivo por bloques de 1MB.
@@ -59,7 +63,7 @@ def execute_rename(files, progress_callback=None):
             # MISMO NOMBRE
             # =================================
             if source == destination:
-                if update_metadata(source, source.name, author="Saarmyx"):
+                if update_metadata(source, source.name, author=METADATA_AUTHOR):
                     stats["metadata_updated"] += 1
                 continue
 
@@ -103,7 +107,7 @@ def execute_rename(files, progress_callback=None):
             # =================================
             # ACTUALIZAR METADATOS
             # =================================
-            if update_metadata(destination, destination.name, author="Saarmyx"):
+            if update_metadata(destination, destination.name, author=METADATA_AUTHOR):
                 stats["metadata_updated"] += 1
 
         except Exception as e:
