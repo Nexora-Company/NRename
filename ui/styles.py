@@ -1,145 +1,149 @@
-DARK_STYLE = """
-/* ==================================================
-   NEXORA — DESIGN SYSTEM (Qt QSS Adaptation)
-   Base: Monochromatic (#0A0A0A) + Red Accent (#E11D2E)
-   ================================================== */
+"""Sistema de estilos Qt de Nexora Rename.
 
-QMainWindow {
-    background-color: #0A0A0A;
-}
+Construido exclusivamente con tokens oficiales de `ui.tokens`. No se
+duplican valores de color fuera de los tokens.
+"""
 
-QWidget {
-    color: #FFFFFF;
-    font-family: 'Inter', -apple-system, sans-serif;
+from ui.tokens import (
+    NX_BG_BASE,
+    NX_BG_ELEVATED,
+    NX_BG_INTERACTIVE,
+    NX_BG_RAISED,
+    NX_BORDER_SUBTLE,
+    NX_COLOR_BRAND_RED,
+    NX_COLOR_BRAND_RED_DEEP,
+    NX_COLOR_BRAND_RED_LIGHT,
+    NX_FONT_FAMILY,
+    NX_TEXT_DISABLED,
+    NX_TEXT_MUTED,
+    NX_TEXT_PRIMARY,
+    NX_TEXT_SECONDARY,
+)
+
+DARK_STYLE = f"""
+QMainWindow {{
+    background-color: {NX_BG_BASE};
+}}
+
+QWidget {{
+    color: {NX_TEXT_PRIMARY};
+    font-family: {NX_FONT_FAMILY};
     font-size: 13px;
-}
+}}
 
-/* ==================================================
-   BUTTONS & TOOLBUTTONS
-   ================================================== */
-QPushButton, QToolButton {
-    background-color: #0A0A0A;
-    color: #FFFFFF;
-    border: 1px solid #545454;
+QPushButton, QToolButton {{
+    background-color: {NX_BG_BASE};
+    color: {NX_TEXT_PRIMARY};
+    border: 1px solid {NX_BORDER_SUBTLE};
     border-radius: 2px;
     padding: 8px 16px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
+}}
 
-QPushButton:hover, QToolButton:hover {
-    background-color: #2B2B2B;
-    border-color: #E11D2E;
-    color: #FFFFFF;
-}
+QPushButton:hover, QToolButton:hover {{
+    background-color: {NX_BG_INTERACTIVE};
+    border-color: {NX_COLOR_BRAND_RED};
+    color: {NX_TEXT_PRIMARY};
+}}
 
-QPushButton:pressed, QToolButton:pressed {
-    background-color: #E11D2E;
-    border-color: #E11D2E;
-    color: #FFFFFF;
-}
+QPushButton:pressed, QToolButton:pressed {{
+    background-color: {NX_COLOR_BRAND_RED};
+    border-color: {NX_COLOR_BRAND_RED};
+    color: {NX_TEXT_PRIMARY};
+}}
 
-QPushButton:disabled, QToolButton:disabled {
-    background-color: #0A0A0A;
-    color: #545454;
-    border-color: #2B2B2B;
-}
+QPushButton:disabled, QToolButton:disabled {{
+    background-color: {NX_BG_BASE};
+    color: {NX_TEXT_DISABLED};
+    border-color: {NX_BORDER_SUBTLE};
+}}
 
-/* ==================================================
-   MENÚS FLOTANTES (QMenu)
-   ================================================== */
-QMenu {
-    background-color: #0A0A0A;
-    border: 1px solid #2B2B2B;
+QPushButton:focus, QToolButton:focus {{
+    border-color: {NX_COLOR_BRAND_RED_LIGHT};
+}}
+
+QMenu {{
+    background-color: {NX_BG_BASE};
+    border: 1px solid {NX_BORDER_SUBTLE};
     padding: 4px;
-}
+}}
 
-QMenu::item {
+QMenu::item {{
     background-color: transparent;
-    color: #ECECEC;
+    color: {NX_TEXT_SECONDARY};
     padding: 8px 24px;
     font-weight: 500;
-}
+}}
 
-QMenu::item:selected {
-    background-color: #B01522;
-    color: #FFFFFF;
-}
+QMenu::item:selected {{
+    background-color: {NX_COLOR_BRAND_RED_DEEP};
+    color: {NX_TEXT_PRIMARY};
+}}
 
-/* ==================================================
-   LISTS & TABLES
-   ================================================== */
-QListWidget, QTableWidget {
-    background-color: #0A0A0A;
-    border: 1px solid #2B2B2B;
+QListWidget, QTableWidget {{
+    background-color: {NX_BG_BASE};
+    border: 1px solid {NX_BORDER_SUBTLE};
     border-radius: 2px;
-    gridline-color: #2B2B2B;
+    gridline-color: {NX_BORDER_SUBTLE};
     outline: none;
-    color: #ECECEC;
-}
+    color: {NX_TEXT_SECONDARY};
+}}
 
-QListWidget::item {
+QListWidget::item {{
     padding: 8px 12px;
-    border-bottom: 1px solid #1A1A1A;
-}
+    border-bottom: 1px solid {NX_BG_RAISED};
+}}
 
-QListWidget::item:hover {
-    background-color: #1A1A1A;
-    color: #FFFFFF;
-}
+QListWidget::item:hover {{
+    background-color: {NX_BG_RAISED};
+    color: {NX_TEXT_PRIMARY};
+}}
 
-QListWidget::item:selected, QTableWidget::item:selected {
-    background-color: #B01522;
-    color: #FFFFFF;
-}
+QListWidget::item:selected, QTableWidget::item:selected {{
+    background-color: {NX_COLOR_BRAND_RED_DEEP};
+    color: {NX_TEXT_PRIMARY};
+}}
 
-QHeaderView::section {
-    background-color: #0A0A0A;
-    color: #8A8A8A;
+QHeaderView::section {{
+    background-color: {NX_BG_BASE};
+    color: {NX_TEXT_MUTED};
     padding: 8px 12px;
     border: none;
-    border-bottom: 2px solid #E11D2E;
+    border-bottom: 2px solid {NX_COLOR_BRAND_RED};
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
+}}
 
-/* ==================================================
-   PROGRESS BAR & STATUS
-   ================================================== */
-QProgressBar {
-    background-color: #1A1A1A;
-    border: 1px solid #2B2B2B;
+QProgressBar {{
+    background-color: {NX_BG_RAISED};
+    border: 1px solid {NX_BORDER_SUBTLE};
     border-radius: 2px;
     text-align: center;
-    color: #FFFFFF;
+    color: {NX_TEXT_PRIMARY};
     font-weight: 600;
-}
+}}
 
-QProgressBar::chunk {
-    background-color: #E11D2E;
-}
+QProgressBar::chunk {{
+    background-color: {NX_COLOR_BRAND_RED};
+}}
 
-QLabel {
-    color: #8A8A8A;
+QLabel {{
+    color: {NX_TEXT_SECONDARY};
     font-weight: 500;
-}
+}}
 
-/* Scrollbars industriales */
-QScrollBar:vertical, QScrollBar:horizontal {
-    background: #0A0A0A;
+QScrollBar:vertical, QScrollBar:horizontal {{
+    background: {NX_BG_BASE};
     border: none;
     width: 8px;
     height: 8px;
-}
+}}
 
-QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-    background: #2B2B2B;
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal {{
+    background: {NX_BORDER_SUBTLE};
     border-radius: 0px;
-}
+}}
 
-QScrollBar::handle:hover {
-    background: #E11D2E;
-}
+QScrollBar::handle:hover {{
+    background: {NX_COLOR_BRAND_RED};
+}}
 """
