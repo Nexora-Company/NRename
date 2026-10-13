@@ -1,14 +1,36 @@
 import json
+import os
 from pathlib import Path
 
 
-HISTORY_FILE = Path("history.json")
+def _user_data_dir():
+    """Directorio de datos del usuario (fuera del repositorio)."""
+    base = os.environ.get("NEXORA_RENAME_DATA")
+    if base:
+        return Path(base)
+    return Path.home() / ".nexora-rename"
+
+
+HISTORY_FILE = _user_data_dir() / "history.json"
+
+# Ruta heredada (repo/CWD). Solo se usa para migrar una vez.
+LEGACY_HISTORY_FILE = Path("history.json")
 
 
 def initialize_history():
     """
     Crea el archivo history.json si no existe.
+    Migra el archivo heredado una sola vez sin exponer rutas del repo.
     """
+
+    HISTORY_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+    if not HISTORY_FILE.exists() and LEGACY_HISTORY_FILE.exists():
+        try:
+            HISTORY_FILE.write_bytes(LEGACY_HISTORY_FILE.read_bytes())
+        except Exception as e:
+            print("[HISTORY MIGRATE ERROR]")
+            print(e)
 
     if not HISTORY_FILE.exists():
 
